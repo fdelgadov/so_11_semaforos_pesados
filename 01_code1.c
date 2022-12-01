@@ -35,8 +35,7 @@ int main() {
     printf("No puedo crear semaforo \n");
     exit(0);
   }
-  //arg.val = 0;
-  //semctl(Id_Semaforo, 0, SETVAL, &arg);
+  
   while (1) {
     printf(" Esperando Semaforo %d \n", i);
     wait(0);
