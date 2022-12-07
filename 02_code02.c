@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
-#if defined(__GNU_LIBRARY__) && !defined(_SEM_SEMUN_UNDEFINED)
+#if defined(__GNU_LIBRARY__) && !defined(_SEM_SEMUN_UNDEFINED) 
 #else
 union semun {
   int val;
@@ -13,17 +13,10 @@ union semun {
   struct seminfo* __buf;
 };
 #endif
-int Id_Semaforo;
-
-void signal(int s){
-  struct sembuf op;
-  op.sem_num = s;
-  op.sem_op = 1;
-  op.sem_flg = 0;
-  semop(Id_Semaforo, &op, 1);
-}
 int main() {
   key_t Clave;
+  int Id_Semaforo;
+  struct sembuf Operacion;
   union semun arg;
   int i;
   Clave = ftok("/bin/ls", 33);
@@ -36,13 +29,12 @@ int main() {
     printf("No puedo crear semaforo \n");
     exit(0);
   }
-
+  Operacion.sem_num = 0;
+  Operacion.sem_op = 1;
+  Operacion.sem_flg = 0;
   for (i = 0; i < 10; i++) {
-    printf("Levanto Semaforo 1\n");
-    signal(0);
-    sleep(1);
-    printf("Levanto Semaforo 2\n");
-    signal(1);
+    printf("Levanto Semaforo \n");
+    semop(Id_Semaforo, &Operacion, 1);
     sleep(1);
   }
 }
